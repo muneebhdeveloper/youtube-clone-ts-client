@@ -3,11 +3,23 @@ import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { NotificationsProvider } from "@mantine/notifications";
+import { NextPage } from "next";
+import { ReactElement, ReactNode } from "react";
 
 const queryClient = new QueryClient();
 
-export default function App(props: AppProps) {
+type NextPageWithLayout = NextPage & {
+  getLayout?: (page: ReactElement) => ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+export default function App(props: AppPropsWithLayout) {
   const { Component, pageProps } = props;
+
+  const getLayout = Component.getLayout || ((page) => page);
 
   return (
     <>
